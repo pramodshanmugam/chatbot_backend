@@ -33,6 +33,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
+    'channels',
     'chat',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -71,6 +72,14 @@ TEMPLATES = [
         },
     },
 ]
+ASGI_APPLICATION = 'chatbot_backend.asgi.application'  # Path to your asgi.py
+
+# Channels layer settings
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    },
+}
 
 WSGI_APPLICATION = 'chatbot_backend.wsgi.application'
 

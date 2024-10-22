@@ -11,42 +11,40 @@ import requests
 import requests
 import json
 
+import requests
+import json
+
 def send_to_ollama(prompt):
     """
-    Sends a prompt to the locally running Ollama API and returns the bot's response.
-    Handles multiple JSON objects returned by the API.
+    Sends a prompt to the locally running Ollama API and streams the response
+    as it's generated.
     """
     url = "http://localhost:11434/api/generate"  # Ollama API endpoint
 
-    # Payload that is sent to Ollama (adjust this to fit Ollama's API requirements)
     payload = {
         "model": "llama3.2",  # Model you're using
         "prompt": prompt      # The user's prompt
     }
 
-    # Making a POST request to the local Ollama API
     try:
-        response = requests.post(url, json=payload)
+        response = requests.post(url, json=payload, stream=True)
 
-        # Split the response text by newlines (assuming newline-delimited JSON objects)
-        raw_responses = response.text.strip().splitlines()
-
-        # Concatenate all the 'response' fields from each JSON object
-        bot_response = ""
-        for raw_json in raw_responses:
-            # Parse each JSON object
-            try:
-                json_obj = json.loads(raw_json)
-                bot_response += json_obj.get("response", "")
-            except json.JSONDecodeError as e:
-                print(f"Error parsing JSON object: {e}")
-                continue
-
-        return bot_response.strip()
+        # Yield the response as it is received
+        for raw_chunk in response.iter_lines():
+            if raw_chunk:  # If there's a line of data
+                try:
+                    # Parse each JSON object from the line
+                    json_obj = json.loads(raw_chunk.decode('utf-8'))
+                    
+                    # Yield each 'response' segment as soon as it arrives
+                    yield json_obj.get("response", "")
+                except json.JSONDecodeError as e:
+                    print(f"Error parsing JSON object: {e}")
+                    continue
 
     except requests.exceptions.RequestException as e:
         print(f"Error calling Ollama API: {e}")
-        return "Error: Unable to get response from Ollama API"
+        yield "Error: Unable to get response from Ollama API"
 
 
 @api_view(['POST'])
