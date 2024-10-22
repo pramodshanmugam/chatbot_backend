@@ -1,0 +1,36 @@
+# Python related files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.so
+
+# Virtual environment
+venv/
+env/
+ENV/
+*.env
+
+# Django specific files
+db.sqlite3
+*.log
+
+# If using PyCharm
+.idea/
+
+# If using VSCode
+.vscode/
+
+# MacOS specific files
+.DS_Store
+
+# Node.js related files (if using React in frontend)
+node_modules/
+
+# Coverage report
+htmlcov/
+.coverage
+.coverage.*
+
+# Migrations (optional, but sometimes handy to ignore when experimenting)
+chat/migrations/
