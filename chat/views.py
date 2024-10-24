@@ -19,7 +19,8 @@ def send_to_ollama(prompt):
     Sends a prompt to the locally running Ollama API and streams the response
     as it's generated.
     """
-    url = "http://localhost:11434/api/generate"  # Ollama API endpoint
+    print("inside ollama")
+    url = "http://host.docker.internal:11434/api/generate"  # Ollama API endpoint
 
     payload = {
         "model": "llama3.2",  # Model you're using

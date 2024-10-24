@@ -21,7 +21,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         """
         Sends a prompt to the locally running Ollama API and streams the response.
         """
-        url = "http://localhost:11434/api/generate"  # Ollama API endpoint
+        print("insisde ollama")
+        url = "http://host.docker.internal:11434/api/generate"  # Ollama API endpoint
+
 
         payload = {
             "model": "llama3.2",  # Model you're using
